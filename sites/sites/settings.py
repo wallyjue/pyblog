@@ -26,7 +26,9 @@ SECRET_KEY = 'rb-qailldihs4tb9--%r@^#p#06um5t(js4i_)x^g+yzd8mk*n'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+PROJECT_DIR  = os.path.dirname(__file__)
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+#STATIC_URL = '/static/'
 
 # Application definition
 
@@ -120,3 +122,36 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'NOTSET',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/kakasi/django_debug.log',
+        }
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'NOTSET',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'ERROR'
+        }
+    }
+}

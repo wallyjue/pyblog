@@ -1,7 +1,14 @@
 from django.shortcuts import render
 from django.contrib import auth
 from django.contrib.auth.models import User
-from .models import Post,Blog
+from .models import *
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 def login(request):
@@ -56,3 +63,16 @@ def delete_post(request,username,pk):
 def edit_post(request,username,pk):
     if request.user.is_authenticated():
         return render(request, 'ok.html', {})
+
+def create_post(request):
+    
+    if request.method == "POST":
+        logger.debug(''+request.POST.get('tag', ''))
+        return render(request, 'create.html', {})
+    else:
+        tags = Tag.objects.all()
+        category = Category.objects.all()
+        return render(request, 'create.html', {
+            'tags': tags,
+            'category': category,
+            })

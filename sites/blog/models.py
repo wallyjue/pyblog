@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 class Blog(models.Model):
 	title = models.CharField(max_length=100)
@@ -16,8 +15,6 @@ class Post(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.TextField(blank=True)
 	photo = models.URLField(blank=True)
-	tags = models.CharField(max_length=200)
-	category = models.CharField(max_length=200)
 	location = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now_add=True)
 	author = models.ForeignKey(Blog)
@@ -29,10 +26,16 @@ class Media(models.Model):
 	mediafile = models.URLField(blank=True)
 	post = models.ForeignKey(Post)
 	def __str__(self):
-		return u"%s" % (self.post.title)
+		return u"%s" % (self.mediafile)
 
 class Tag(models.Model):
-	post = models.ForeignKey(Post)
+	post = models.ForeignKey(Post,null=True, blank=True, default = None)
 	tag = models.CharField(max_length=100)
 	def __str__(self):
-		return u"%s" % (self.post.title)
+		return u"%s" % (self.tag)
+
+class Category(models.Model):
+	post = models.ForeignKey(Post,null=True, blank=True, default = None)
+	name = models.CharField(max_length=100)
+	def __str__(self):
+		return u"%s" % (self.name)

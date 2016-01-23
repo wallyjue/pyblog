@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^blog/(?P<username>[-\w]+)/$', blog_detail, name='blog_detail'),
     url(r'^blog/(?P<username>[-\w]+)/(?P<pk>\d+)/$', post_detail, name='post_detail'),
     url(r'^post/update/(?P<username>[-\w]+)/(?P<pk>\d+)/$', edit_post, name='edit_post'),
+    url(r'^post/create/$', create_post, name='create_post'),
     url(r'^post/delete/(?P<username>[-\w]+)/(?P<pk>\d+)/$', delete_post, name='delete_post'),
 ]
