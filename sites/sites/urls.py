@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from blog.views import index,login,logout
+from blog.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$',login),
-    url(r'^accounts/logout/$',logout),
+    url(r'^blog/$',login),
+    url(r'^blog/logout/$',logout),
     url(r'^index/$',index),
+    url(r'^blog/(?P<username>[-\w]+)/$', blog_detail, name='blog_detail'),
+    url(r'^blog/(?P<username>[-\w]+)/(?P<pk>\d+)/$', post_detail, name='post_detail'),
+    url(r'^post/update/(?P<username>[-\w]+)/(?P<pk>\d+)/$', edit_post, name='edit_post'),
+    url(r'^post/delete/(?P<username>[-\w]+)/(?P<pk>\d+)/$', delete_post, name='delete_post'),
 ]

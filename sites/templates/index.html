@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Restaurant King</title>
+        <title>Blog system</title>
         <meta charset="utf-8">
     </head>
     <body>
-        <h2>歡迎來到餐廳王</h2>
-        {% if request.user.is_authenticated %}
+        <h2>{{blog.title}}</h2>
+            {% if request.user.is_authenticated %}
+            {% else %}
+                <p>Login here: <a href="/blog/">Login</a></p>
+            {% endif %}
+            {{blog.title}}
             <p>
-                {{request.user}} 您已經登入囉~
-                <a href="/accounts/logout/">登出</a>
+                {% if request.user.is_authenticated %}
+                Welcome, {{request.user}}. <a href="/blog/logout/">Logout</a>
+                <a href="/post/create/">Post</a>
+                {% endif %}
+                {% for post in post_list %}
+                    <div>
+                    {{ post.title }}
+                    {{ post.content }}
+                    {{ post.tags }}
+                    {{ post.created_at }}
+                    {{ post.photo }}
+                    {% if request.user.is_authenticated %}
+                        </br>
+                        <a href="/blog/{{request.user.username}}/{{ post.pk }}">More...</a>
+                        <a href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
+                        <a href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
+                    
+                    {% endif %}
+                    </div></br>
+                {% endfor %}
+                
             </p>
-            <a href="/restaurants_list/">餐廳列表</a>
-        {% else %}
-            <p>您尚未登入喔~<a href="/accounts/login/">登入</a></p>
-        {% endif %}
     </body>
 </html>
