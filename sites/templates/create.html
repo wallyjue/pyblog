@@ -1,43 +1,83 @@
 <!DOCTYPE html>
 <html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load staticfiles %}
-    <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'app.js' %}"></script>
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <head>
         <title>Blog system</title>
         <meta charset="utf-8">
     </head>
     <body>
-        <h2>{{blog.title}}</h2>
-            {% if request.user.is_authenticated %}
-            {% else %}
-                <p>Login here: <a href="/blog/">Login</a></p>
-            {% endif %}
-            {{blog.title}}
-            <p>
+    <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/blog/{{request.user}}"><span>{{blog.title}}</span></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="/post/create/">Post</a>
+                    </li>
+                    <li>
+                        <a href="/blog/logout/">Logout</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="/blog/">Login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+            
                 {% if request.user.is_authenticated %}
-                <h1>Welcome, {{request.user}}. <a href="/blog/logout/">Logout</a></h1>
                 
-                <form id="create_post_form" action="/post/create/" method="post">
+                <form role="form" id="create_post_form" action="/post/create/" method="post">
+                    <div class="form-group">
                     <label for="title">title:</label>
-                    <input type="text" name="title" value="" id="title"> <br />
+                    <input class="form-control" type="text" name="title" value="" id="title"> <br />
+
                     <label for="content">content:</label>
-                    <input type="text" name="content" value="" id="content"> <br />
+                    <textarea class="form-control" rows="5" name="content" value="" id="content"></textarea> <br />
+                    <label for="category">Select category:</label>
+                    <select class="form-control" id="category" name="category">
+                        {% for cat in category %}
+                        <option>{{cat.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <!--
+                    <div class="form-group">
                     <label for="media">media:</label>
                     <input type="text" name="media" value="" id="media"> <br />
-                    <label for="category">category:</label>
-                    <input type="text" name="category" value="" id="category"> <br />
+                    </div>-->
                     <label for="tag">tag:</label>
-                    <input type="text" name="tag" value="" id="tag"> <br />
+                    <input class="form-control" type="text" name="tag" value="" id="tag"> <br />
+                    </div>
                     <input id="submit_create_post" type="submit" value="Submit" />
                 </form>
-                {% for tag in tags %}
-                    tag: {{ tag.tag }}</br>
-                {% endfor %}
-                {% for category in category %}
-                    category: {{ category.name }}</br>
-                {% endfor %}
+                {% else %}
+                    <a href="/blog/">Login</a>
                 {% endif %}
-            </p>
+            </div>
+        </div>
+    </div>
     </body>
+    <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app.js' %}"></script>
 </html>
