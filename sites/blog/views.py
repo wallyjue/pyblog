@@ -25,7 +25,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return render(request, 'index.html', {})
+    return render(request, 'login.html', {})
 
 def index(request):
     return render(request, 'index.html', {})
@@ -33,19 +33,26 @@ def index(request):
 def blog_detail(request,username):
     user = User.objects.get(username=username)
     blog = Blog.objects.filter( owner = user)
-    post_list = Post.objects.filter(author = blog)
+    post_list = Post.objects.filter(author = blog[0])
+    for post in post_list:
+        tags = Tag.objects.filter( post = post)
+        post.tags = tags
+        
     return render(request, 'index.html', {
         'post_list': post_list,
-        'blog': blog,
+        'blog': blog[0],
         })
 
 def post_detail(request,username,pk):
     #if request.user.is_authenticated() != True: 
     #    return render(request, 'index.html', {})
-
     user = User.objects.get(username=username)
     blog = Blog.objects.filter( owner = user)
     post_list = Post.objects.filter(pk=pk)
+    for post in post_list:
+        tags = Tag.objects.filter( post = post)
+        post.tags = tags
+
     return render(request, 'post.html', {
         'post_list': post_list,
         'blog': blog,
@@ -65,10 +72,29 @@ def edit_post(request,username,pk):
         return render(request, 'ok.html', {})
 
 def create_post(request):
-    
     if request.method == "POST":
-        logger.debug(''+request.POST.get('tag', ''))
-        return render(request, 'create.html', {})
+        if request.user.is_authenticated():
+            user = User.objects.get(username=request.user.username)
+            blog = Blog.objects.filter( owner = user)
+            post_list = Post.objects.filter(author = blog)
+            title = request.POST.get('title', '')
+            content = request.POST.get('content', '')
+            category = request.POST.get('category', '')
+            content = request.POST.get('content', '')
+            medias = request.POST.getlist('media')
+            tags = request.POST.getlist('tag')
+            newpost = Post.objects.create(author = blog[0],title=title, content=content)
+            for key in tags:
+                Tag.objects.create(post=newpost,tag=key)
+            for key in medias:
+                Media.objects.create(post=newpost,mediafile=key)
+
+            return render(request, 'index.html', {
+                'post_list': post_list,
+                'blog': blog,
+                })
+        else:
+            return render(request, 'index.html', {})
     else:
         tags = Tag.objects.all()
         category = Category.objects.all()

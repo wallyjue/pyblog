@@ -11,6 +11,11 @@ class Blog(models.Model):
 	def __str__(self):
 		return u"%s" % (self.title)
 
+class Category(models.Model):
+	name = models.CharField(max_length=100)
+	def __str__(self):
+		return u"%s" % (self.name)
+
 class Post(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.TextField(blank=True)
@@ -18,7 +23,7 @@ class Post(models.Model):
 	location = models.CharField(max_length=100)
 	created_at = models.DateTimeField(auto_now_add=True)
 	author = models.ForeignKey(Blog)
-
+	category = models.ForeignKey(Category,null=True)
 	def __str__(self):
 		return u"%s" % (self.title)
 
@@ -33,9 +38,3 @@ class Tag(models.Model):
 	tag = models.CharField(max_length=100)
 	def __str__(self):
 		return u"%s" % (self.tag)
-
-class Category(models.Model):
-	post = models.ForeignKey(Post,null=True, blank=True, default = None)
-	name = models.CharField(max_length=100)
-	def __str__(self):
-		return u"%s" % (self.name)

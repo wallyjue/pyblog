@@ -1,39 +1,88 @@
 <!DOCTYPE html>
 <html>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load staticfiles %}
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <head>
         <title>Blog system</title>
         <meta charset="utf-8">
     </head>
     <body>
-        <h2>{{blog.title}}</h2>
-            {% if request.user.is_authenticated %}
-            {% else %}
-                <p>Login here: <a href="/blog/">Login</a></p>
-            {% endif %}
-            {{blog.title}}
-            <p>
-                {% if request.user.is_authenticated %}
-                Welcome, {{request.user}}. <a href="/blog/logout/">Logout</a>
-                <a href="/post/create/">Post</a>
-                {% endif %}
+        <div class="navbar navbar-default navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/blog/{{request.user}}"><span>{{blog.title}}</span></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if request.user.is_authenticated %}
+                        <li>
+                            <a href="/post/create/">Post</a>
+                        </li>
+                        <li>
+                            <a href="/blog/logout/">Logout</a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="/blog/">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+                <!-- Blog Entries Column -->
+                <div class="col-md-8">
                 {% for post in post_list %}
-                    <div>
-                    {{ post.title }}
-                    {{ post.content }}
-                    {{ post.tags }}
-                    {{ post.created_at }}
-                    {{ post.photo }}
-                    {% if request.user.is_authenticated %}
-                        </br>
-                        <a href="/blog/{{request.user.username}}/{{ post.pk }}">More...</a>
-                        <a href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
-                        <a href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
-                    
-                    {% endif %}
-                    </div></br>
+                <h2>
+                    <a href="#">{{ post.title }} </a>
+                </h2>
+                <p class="lead">
+                    Posted by <a href="index.php">{{ post.author.owner.username }}</a> on {{ post.created_at }}
+                </p>
+                <hr>
+                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+                <hr>
+                <p>{{ post.content }}</p>
+                {% for tag in post.tags %}
+                    {{tag.tag}}</br>
                 {% endfor %}
                 
-            </p>
+
+                <a class="btn btn-primary" href="/blog/{{request.user.username}}/{{ post.pk }}">Read More</a>
+                {% if request.user.is_authenticated %}
+                    <a class="btn btn-warning" href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
+                    <a class="btn btn-danger" href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
+                {% endif %}
+                <hr>
+
+
+                
+                    <div>
+                    
+                    
+                    
+                    
+                    {{ post.photo }}
+                    
+                    
+                    </div>
+                {% endfor %}
+                </div>    
+            </div>
+        </div>
     </body>
+    <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap.min.js' %}"></script>
 </html>

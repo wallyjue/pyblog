@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog system</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{blog.title}}</h2>
+            {% if request.user.is_authenticated %}
+                Your post is deleted.
+                <a href="/blog/{{request.user}}">Back</a>
+            {% else %}
+                <p>Login here: <a href="/blog/">Login</a></p>
+                request.user
+            {% endif %}
+    </body>
+</html>

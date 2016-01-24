@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'app.js' %}"></script>
+    <head>
+        <title>Blog system</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <h2>{{blog.title}}</h2>
+            {% if request.user.is_authenticated %}
+            {% else %}
+                <p>Login here: <a href="/blog/">Login</a></p>
+            {% endif %}
+            {{blog.title}}
+            <p>
+                {% if request.user.is_authenticated %}
+                <h1>Welcome, {{request.user}}. <a href="/blog/logout/">Logout</a></h1>
+                
+                <form id="create_post_form" action="/post/create/" method="post">
+                    <label for="title">title:</label>
+                    <input type="text" name="title" value="" id="title"> <br />
+                    <label for="content">content:</label>
+                    <input type="text" name="content" value="" id="content"> <br />
+                    <label for="media">media:</label>
+                    <input type="text" name="media" value="" id="media"> <br />
+                    <label for="category">category:</label>
+                    <input type="text" name="category" value="" id="category"> <br />
+                    <label for="tag">tag:</label>
+                    <input type="text" name="tag" value="" id="tag"> <br />
+                    <input id="submit_create_post" type="submit" value="Submit" />
+                </form>
+                {% for tag in tags %}
+                    tag: {{ tag.tag }}</br>
+                {% endfor %}
+                {% for category in category %}
+                    category: {{ category.name }}</br>
+                {% endfor %}
+                {% endif %}
+            </p>
+    </body>
+</html>
