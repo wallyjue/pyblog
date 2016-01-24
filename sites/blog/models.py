@@ -28,10 +28,10 @@ class Post(models.Model):
 		return u"%s" % (self.title)
 
 class Media(models.Model):
-	mediafile = models.URLField(blank=True)
+	file = models.FileField(upload_to='%Y/%m/%d',null=True)
 	post = models.ForeignKey(Post)
 	def __str__(self):
-		return u"%s" % (self.mediafile)
+		return u"%s" % (self.file)
 
 class Tag(models.Model):
 	post = models.ForeignKey(Post,null=True, blank=True, default = None)

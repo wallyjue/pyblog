@@ -28,7 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = []
 PROJECT_DIR  = os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-#STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Application definition
 
@@ -65,6 +66,10 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
         },

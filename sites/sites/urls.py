@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """sites URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -15,10 +16,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+from django.views.generic import RedirectView
 from blog.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', RedirectView.as_view(url='/blog/', permanent=True)),
     url(r'^blog/$',login),
     url(r'^blog/logout/$',logout),
     url(r'^index/$',index),
@@ -27,4 +32,4 @@ urlpatterns = [
     url(r'^post/update/(?P<username>[-\w]+)/(?P<pk>\d+)/$', edit_post, name='edit_post'),
     url(r'^post/create/$', create_post, name='create_post'),
     url(r'^post/delete/(?P<username>[-\w]+)/(?P<pk>\d+)/$', delete_post, name='delete_post'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
