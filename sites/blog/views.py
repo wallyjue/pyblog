@@ -32,21 +32,29 @@ def index(request):
     return render(request, 'index.html', {})
 
 def blog_detail(request,username):
+    category = Category.objects.all()
+
     user = User.objects.get(username=username)
-    blog = Blog.objects.filter( owner = user)
-    post_list = Post.objects.filter(author = blog[0])
+    blog = Blog.objects.get( owner = user)
+    #tags = Tag.objects.filter(post=)
+    blogtags = []
+    post_list = Post.objects.filter(author = blog)
     for post in post_list:
         tags = Tag.objects.filter( post = post)
-        post.tags = tags
+        for tag in tags:
+            blogtags.append(tag)
         
     return render(request, 'index.html', {
         'post_list': post_list,
-        'blog': blog[0],
+        'blog': blog,
+        'category':category,
+        'blogtags':blogtags
         })
 
 def post_detail(request,username,pk):
     #if request.user.is_authenticated() != True: 
     #    return render(request, 'index.html', {})
+    category = Category.objects.all()
     user = User.objects.get(username=username)
     blog = Blog.objects.filter( owner = user)
     post_list = Post.objects.filter(pk=pk)
@@ -57,6 +65,7 @@ def post_detail(request,username,pk):
     return render(request, 'post.html', {
         'post_list': post_list,
         'blog': blog,
+        'category':category,
         })
 
 def delete_post(request,username,pk):
@@ -76,7 +85,7 @@ def create_post(request):
     if request.method == "POST":
         if request.user.is_authenticated():
             user = User.objects.get(username=request.user.username)
-            blog = Blog.objects.filter( owner = user)
+            blog = Blog.objects.get( owner = user)
             post_list = Post.objects.filter(author = blog)
             title = request.POST.get('title', '')
             content = request.POST.get('content', '')
@@ -85,7 +94,7 @@ def create_post(request):
             content = request.POST.get('content', '')
             
             tags = request.POST.getlist('tag')
-            newpost = Post.objects.create(author = blog[0],title=title, content=content,category=category)
+            newpost = Post.objects.create(author = blog,title=title, content=content,category=category)
             for key in tags:
                 Tag.objects.create(post=newpost,tag=key)
             #for key in medias:
@@ -100,11 +109,11 @@ def create_post(request):
     else:
         if request.user.is_authenticated():
             user = User.objects.get(username=request.user.username)
-            blog = Blog.objects.filter( owner = user)
+            blog = Blog.objects.get( owner = user)
             tags = Tag.objects.all()
             category = Category.objects.all()
             return render(request, 'create.html', {
                 'tags': tags,
                 'category': category,
-                'blog':blog[0],
+                'blog':blog,
                 })
