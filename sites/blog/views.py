@@ -43,7 +43,7 @@ def blog_detail(request,username):
     elif tag_name is not None:
         tag_list = Tag.objects.filter(tag=tag_name)
         for tag in tag_list:
-            post_list.append(Tag.objects.get(tag=tag).post)
+            post_list.append(tag.post)
     else:
         post_list = Post.objects.filter(author = blog)
         
@@ -57,11 +57,13 @@ def blog_detail(request,username):
 def post_detail(request,username,pk):
     category,blogtags,blog = get_tags_category(username)
     post_list = Post.objects.filter(pk=pk)
+    attachs = Media.objects.filter(post=post_list[0])
     return render(request, 'post.html', {
         'post_list': post_list,
         'blog': blog,
         'category':category,
         'blogtags':blogtags,
+        'attachs':attachs
         })
 
 def delete_post(request,username,pk):
@@ -128,9 +130,7 @@ def get_tags_category(username):
     category = Category.objects.all()
     user = User.objects.get(username=username)
     blog = Blog.objects.get( owner = user)
-    blogtags = []
-    for post in Post.objects.all():
-        tags = Tag.objects.filter( post = post)
-        for tag in tags:
-            blogtags.append(tag)
-    return category,blogtags,blog
+    tagsets = set()
+    for tag in Tag.objects.all():
+        tagsets.add(tag.tag)
+    return category,tagsets,blog

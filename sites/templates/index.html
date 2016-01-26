@@ -46,10 +46,10 @@
                 <div class="col-md-8">
                 {% for post in post_list %}
                 <h2>
-                    <a href="#">{{ post.title }} </a>
+                    <a href="/blog/{{request.user.username}}/{{ post.pk }}">{{ post.title }} </a>
                 </h2>
                 <p class="lead">
-                    Posted by <a href="index.php">{{ post.author.owner.username }}</a> on {{ post.created_at }}
+                    Posted by <a href="">{{ post.author.owner.username }}</a> on {{ post.created_at }}
                 </p>
                 <hr>
                 <img class="img-responsive" src="http://placehold.it/900x300" alt="">
@@ -92,7 +92,7 @@
                             <div class="col-lg-6">
                                 <ul class="list-unstyled">
                                     {% for tag in blogtags %}
-                                    <li><a href="/blog/{{request.user.username}}?tag={{tag.tag}}">{{tag.tag}}</a>
+                                    <li><a href="/blog/{{request.user.username}}?tag={{tag}}">{{tag}}</a>
                                     </li>
                                     {% endfor %}
                                 </ul>

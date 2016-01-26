@@ -45,27 +45,32 @@
                 <div class="col-md-8">
                 {% for post in post_list %}
                 <h2>
-                    <a href="#">{{ post.title }} </a>
+                    <a href="/blog/{{request.user.username}}/{{ post.pk }}">{{ post.title }} </a>
                 </h2>
                 <p class="lead">
-                    Posted by <a href="index.php">{{ post.author.owner.username }}</a> on {{ post.created_at }}
+                    Posted by <a href="">{{ post.author.owner.username }}</a> on {{ post.created_at }}
                 </p>
                 <hr>
                 <img class="img-responsive" src="http://placehold.it/900x300" alt="">
                 <hr>
                 <p>{{ post.content }}</p>
                 {% for tag in category %}
-                    {{tag.tag}}</br>
+                    {{tag.tag}}<br>
                 {% endfor %}
+                    <div><ul class="list-group">
+                    {% for file in attachs %}
+                        <li class = "list-group-item"><a href="/media/{{file}}">{{file}}</a></li>
+                    {% endfor %}
+                    </ul></div>
+
+
                 <a class="btn btn-primary" href="/blog/{{request.user.username}}/{{ post.pk }}">Read More</a>
                 {% if request.user.is_authenticated %}
                     <a class="btn btn-warning" href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
                     <a class="btn btn-danger" href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
                 {% endif %}
                 <hr>
-                    <div>
-                    {{ post.photo }}
-                    </div>
+                    
                 {% endfor %}
                 </div>
                 <div class="col-md-4">
@@ -89,7 +94,7 @@
                             <div class="col-lg-6">
                                 <ul class="list-unstyled">
                                     {% for tag in blogtags %}
-                                    <li><a href="/blog/{{request.user.username}}?tag={{tag.tag}}">{{tag.tag}}</a>
+                                    <li><a href="/blog/{{request.user.username}}?tag={{tag}}">{{tag}}</a>
                                     </li>
                                     {% endfor %}
                                 </ul>
