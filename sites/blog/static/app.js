@@ -22,6 +22,10 @@ $(document).ready(function() {
 				postData.append(formData[i].name,formData[i].value);	
 			}
 		}
+		for(var i = 0; i < $('#docfile')[0].files.length; i++){
+			postData.append('docfile',$('#docfile')[0].files[i]);
+		}
+
 	    $.ajax(
 	    {
 	        url : formURL,

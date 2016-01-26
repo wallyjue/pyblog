@@ -54,6 +54,10 @@
 
                     <label for="content">content:</label>
                     <textarea class="form-control" rows="5" name="content" value="" id="content"></textarea> <br />
+
+                    <label for="docfile">attachment:</label>
+                    <input id="docfile" type="file" name="docfile" multiple="multiple">
+
                     <label for="category">Select category:</label>
                     <select class="form-control" id="category" name="category">
                         {% for cat in category %}
