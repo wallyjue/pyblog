@@ -32,23 +32,34 @@ def index(request):
     return render(request, 'index.html', {})
 
 def blog_detail(request,username):
-    category = Category.objects.all()
+    category,blogtags,blog = get_tags_category(username)
+    #category = Category.objects.all()
+    cat_pk = request.GET.get('cat', None)
+    tag_name = request.GET.get('tag', None)
+    #user = User.objects.get(username=username)
+    #blog = Blog.objects.get( owner = user)
+    #blogtags = []
+    post_list = []
+    if cat_pk is not None:
+        select_category = Category.objects.get(pk=cat_pk)
+        post_list = Post.objects.filter(author = blog, category=select_category)
+    elif tag_name is not None:
+        tag_list = Tag.objects.filter(tag=tag_name)
+        for tag in tag_list:
+            post_list.append(Tag.objects.get(tag=tag).post)
+    else:
+        post_list = Post.objects.filter(author = blog)
 
-    user = User.objects.get(username=username)
-    blog = Blog.objects.get( owner = user)
-    #tags = Tag.objects.filter(post=)
-    blogtags = []
-    post_list = Post.objects.filter(author = blog)
-    for post in post_list:
-        tags = Tag.objects.filter( post = post)
-        for tag in tags:
-            blogtags.append(tag)
+    #for post in Post.objects.all():
+#        tags = Tag.objects.filter( post = post)
+#        for tag in tags:
+#            blogtags.append(tag)
         
     return render(request, 'index.html', {
         'post_list': post_list,
         'blog': blog,
         'category':category,
-        'blogtags':blogtags
+        'blogtags':blogtags,
         })
 
 def post_detail(request,username,pk):
@@ -56,16 +67,19 @@ def post_detail(request,username,pk):
     #    return render(request, 'index.html', {})
     category = Category.objects.all()
     user = User.objects.get(username=username)
-    blog = Blog.objects.filter( owner = user)
+    blog = Blog.objects.get( owner = user)
     post_list = Post.objects.filter(pk=pk)
-    for post in post_list:
+    blogtags = []
+    for post in Post.objects.all():
         tags = Tag.objects.filter( post = post)
-        post.tags = tags
+        for tag in tags:
+            blogtags.append(tag)
 
     return render(request, 'post.html', {
         'post_list': post_list,
         'blog': blog,
         'category':category,
+        'blogtags':blogtags,
         })
 
 def delete_post(request,username,pk):
@@ -78,8 +92,21 @@ def delete_post(request,username,pk):
         	})
 
 def edit_post(request,username,pk):
+    user = User.objects.get(username=username)
+    blog = Blog.objects.get( owner = user)
+    post_list = Post.objects.filter(pk=pk)
+    blogtags = []
+    for post in Post.objects.all():
+        tags = Tag.objects.filter( post = post)
+        for tag in tags:
+            blogtags.append(tag)
+
     if request.user.is_authenticated():
-        return render(request, 'ok.html', {})
+        post = Post.objects.get(pk=pk)
+        blog = post.author
+        return render(request, 'create.html', {
+            'blog': blog,
+            })
 
 def create_post(request):
     if request.method == "POST":
@@ -117,3 +144,13 @@ def create_post(request):
                 'category': category,
                 'blog':blog,
                 })
+def get_tags_category(username):
+    category = Category.objects.all()
+    user = User.objects.get(username=username)
+    blog = Blog.objects.get( owner = user)
+    blogtags = []
+    for post in Post.objects.all():
+        tags = Tag.objects.filter( post = post)
+        for tag in tags:
+            blogtags.append(tag)
+    return category,blogtags,blog
