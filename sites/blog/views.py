@@ -47,6 +47,10 @@ def blog_detail(request,username):
     else:
         post_list = Post.objects.filter(author = blog)
         
+    for post in post_list:
+        post.media = Media.objects.filter(post = post)
+        post.tags = Tag.objects.filter(post = post)
+
     return render(request, 'index.html', {
         'post_list': post_list,
         'blog': blog,
@@ -77,16 +81,33 @@ def delete_post(request,username,pk):
 
 def edit_post(request,username,pk):
     category,blogtags,blog = get_tags_category(username)
-    #post_list = Post.objects.filter(pk=pk)
-
     if request.user.is_authenticated():
-        post = Post.objects.get(pk=pk)
-        blog = post.author
-        return render(request, 'create.html', {
-            'blog': blog,
-            'category':category,
-            'blogtags':blogtags,
-            })
+        if request.method == "POST":
+            post = Post.objects.get(pk=pk)
+            title = request.POST.get('title', '')
+            content = request.POST.get('content', '')
+            category = Category.objects.get(name=request.POST.get('category', 'None'))
+            tags = request.POST.getlist('tag')
+            attachs = Media.objects.filter(post=post)
+            post_list = Post.objects.filter(pk=pk)
+            return render(request, 'post.html', {
+                'post_list': post_list,
+                'blog': blog,
+                'category':category,
+                'blogtags':blogtags,
+                'attachs':attachs,
+                'post':post,
+                'tags':tags
+                })
+        else:    
+            post = Post.objects.get(pk=pk)
+            blog = post.author
+            return render(request, 'edit.html', {
+                'blog': blog,
+                'category':category,
+                'blogtags':blogtags,
+                'post':post,
+                })
 
 def create_post(request):
     if request.method == "POST":
@@ -96,10 +117,7 @@ def create_post(request):
             post_list = Post.objects.filter(author = blog)
             title = request.POST.get('title', '')
             content = request.POST.get('content', '')
-            
             category = Category.objects.get(name=request.POST.get('category', 'None'))
-            content = request.POST.get('content', '')
-
             tags = request.POST.getlist('tag')
             newpost = Post.objects.create(author = blog,title=title, content=content,category=category)
             for eachfile in request.FILES.getlist('docfile'):
@@ -107,8 +125,6 @@ def create_post(request):
 
             for key in tags:
                 Tag.objects.create(post=newpost,tag=key)
-            #for key in medias:
-            #    Media.objects.create(post=newpost,mediafile=key)
 
             return render(request, 'index.html', {
                 'post_list': post_list,

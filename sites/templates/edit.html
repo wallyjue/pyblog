@@ -50,10 +50,10 @@
                 <form role="form" id="create_post_form" action="/post/create/" method="post">
                     <div class="form-group">
                     <label for="title">title:</label>
-                    <input class="form-control" type="text" name="title" value="" id="title"> <br />
+                    <input class="form-control" type="text" name="title" value="{{post.title}}" id="title"> <br />
 
                     <label for="content">content:</label>
-                    <textarea class="form-control" rows="5" name="content" value="" id="content"></textarea> <br />
+                    <textarea class="form-control" rows="5" name="content" value="{{post.content}}" id="content"></textarea> <br />
 
                     <label for="docfile">attachment:</label>
                     <input id="docfile" type="file" name="docfile" multiple="multiple">

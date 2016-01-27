@@ -4,10 +4,11 @@ from django.contrib.auth.models import User
 class Blog(models.Model):
 	title = models.CharField(max_length=100)
 	desc = models.TextField(blank=True)
-	domain = models.CharField(max_length=100)
+	domain = models.CharField(max_length=100,blank=True)
 	photo = models.URLField(blank=True)
 	public = models.BooleanField(blank=True)
 	owner = models.ForeignKey(User)
+	coverfile = models.FileField(blank=True)
 	def __str__(self):
 		return u"%s" % (self.title)
 

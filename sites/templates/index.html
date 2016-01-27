@@ -41,36 +41,55 @@
         </div>
         <!-- Page Content -->
         <div class="container">
+            <img class="img-responsive" src="/media/{{blog.coverfile}}" alt=""></br>
             <div class="row">
                 <!-- Blog Entries Column -->
                 <div class="col-md-8">
-                {% for post in post_list %}
-                <h2>
-                    <a href="/blog/{{request.user.username}}/{{ post.pk }}">{{ post.title }} </a>
-                </h2>
-                <p class="lead">
-                    Posted by <a href="">{{ post.author.owner.username }}</a> on {{ post.created_at }}
-                </p>
-                <hr>
-                <img class="img-responsive" src="http://placehold.it/900x300" alt="">
-                <hr>
-                <p>{{ post.content }}</p>
-                {% for tag in category %}
-                    {{tag.tag}}</br>
-                {% endfor %}
-                
+                {% if blog.public %}
+                    {% for post in post_list %}
+                    <h2>
+                        <a href="/blog/{{request.user.username}}/{{ post.pk }}">{{ post.title }} </a>
+                    </h2>
+                    <p class="lead">
+                        Posted by <a href="">{{ post.author.owner.username }}</a> on {{ post.created_at }}
+                    </p>
+                    <hr>
+                    {% if post.media.count > 0 %}
+                        {% for media in post.media %}
+                            <img class="img-responsive" src="/media/{{media}}" alt=""></br>
+                        {% endfor %}
+                    {% else %}
+                        
+                    {% endif %}
+                    <hr>
+                    <p>{{ post.content }}</p>
+                    {% for tag in category %}
+                        {{tag.tag}}</br>
+                    {% endfor %}
+                    
 
-                <a class="btn btn-primary" href="/blog/{{request.user.username}}/{{ post.pk }}">Read More</a>
-                {% if request.user.is_authenticated %}
-                    <a class="btn btn-warning" href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
-                    <a class="btn btn-danger" href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
+                    <a class="btn btn-primary" href="/blog/{{request.user.username}}/{{ post.pk }}">Read More</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="btn btn-warning" href="/post/update/{{request.user.username}}/{{ post.pk }}">Edit</a>
+                        <a class="btn btn-danger" href="/post/delete/{{request.user.username}}/{{ post.pk }}">Delete</a>
+                    {% endif %}
+                    Tags:
+                    {% for tag in post.tags %}
+                        <a class="btn btn-default" href="/blog/{{request.user.username}}?tag={{tag}}">{{tag.tag}}</a>
+                    {% endfor %}
+                    <hr>
+                        <div>
+                        {{ post.photo }}
+                        </div>
+                    {% endfor %}
+                    
+                {% else %}
+                    
+                        <h1>This blog is a private blog. Go <a href="/blog/">back</a></h1>
+                    
                 {% endif %}
-                <hr>
-                    <div>
-                    {{ post.photo }}
-                    </div>
-                {% endfor %}
                 </div>
+
                 <div class="col-md-4">
                     <div class="well">
                         <h4>Blog Categories</h4>
