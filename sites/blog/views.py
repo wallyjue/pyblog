@@ -48,7 +48,9 @@ def blog_detail(request,username):
     for post in post_list:
         post.media = Media.objects.filter(post = post)
         for media in post.media:
-            if re.match('video', media.content_type):
+            if media.content_type is None:
+                pass
+            elif re.match('video', media.content_type):
                 media.content = 'video'
             elif re.match('image', media.content_type):
                 media.content = 'image'
@@ -65,10 +67,10 @@ def blog_detail(request,username):
 
 def post_detail(request,username,pk):
     category,blogtags,blog = get_tags_category(username)
-    post_list = Post.objects.filter(pk=pk)
-    attachs = Media.objects.filter(post=post_list[0])
+    post = Post.objects.get(pk=pk)
+    attachs = Media.objects.filter(post=post)
     return render(request, 'post.html', {
-        'post_list': post_list,
+        'post': post,
         'blog': blog,
         'category':category,
         'blogtags':blogtags,
@@ -82,6 +84,7 @@ def delete_post(request,username,pk):
 		post.delete()
 		return render(request, 'ok.html', {
         	'blog': blog,
+            'action': 'deleted',
         	})
 
 def edit_post(request,username,pk):
@@ -95,6 +98,7 @@ def edit_post(request,username,pk):
             tags = request.POST.getlist('tag')
             attachs = Media.objects.filter(post=post)
             post_list = Post.objects.filter(pk=pk)
+            post.tags = Tag.objects.filter(post = post)
             return render(request, 'post.html', {
                 'post_list': post_list,
                 'blog': blog,
@@ -106,6 +110,7 @@ def edit_post(request,username,pk):
                 })
         else:    
             post = Post.objects.get(pk=pk)
+            post.tags = Tag.objects.filter(post = post)
             blog = post.author
             return render(request, 'edit.html', {
                 'blog': blog,
@@ -113,6 +118,8 @@ def edit_post(request,username,pk):
                 'blogtags':blogtags,
                 'post':post,
                 })
+    else:
+        render(request, 'login.html', {})
 
 def create_post(request):
     if request.method == "POST":
@@ -131,12 +138,12 @@ def create_post(request):
             for key in tags:
                 Tag.objects.create(post=newpost,tag=key)
 
-            return render(request, 'index.html', {
-                'post_list': post_list,
+            return render(request, 'ok.html', {
                 'blog': blog,
+                'action': 'posted',
                 })
         else:
-            return render(request, 'index.html', {})
+            return blog_detail(request,request.user.username)
     else:
         if request.user.is_authenticated():
             category,blogtags,blog = get_tags_category(request.user.username)

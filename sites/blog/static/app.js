@@ -6,16 +6,19 @@ Tag = function(name,value){
 $(document).ready(function() {
 	$("#create_post_form").submit(function(e){
 		e.preventDefault(); 
-		
+		if($('#title').val().length == 0){
+			alert('title cannot be empty');
+			$('#title').focus();
+			return;
+		}
 	    var formData = $(this).serializeArray();
 	    var formURL = $(this).attr("action");
 	    var postData = new FormData();
 		for(var i = 0; i < formData.length;i++){ 
-			//console.log("i:"+i+" data:"+formData[i].name);
 			if(formData[i].name == 'tag'){
 				var tags = formData[i].value.split(',');
 				for(var j =0; j < tags.length; j++){
-					postData.append(formData[i].name,tags[j]);
+					if(tags[j].length > 0) postData.append(formData[i].name,tags[j]);
 				}
 				
 			}else{
@@ -35,8 +38,9 @@ $(document).ready(function() {
         	contentType: false,
 	        success:function(data, textStatus, jqXHR) 
 	        {
-	        	console.log('success');
-	            //data: return data from server
+	        	//console.log('success');
+	        	$("body").html(data);
+	        	//window.location = '/blog/'+data;
 	        },
 	        error: function(jqXHR, textStatus, errorThrown) 
 	        {
@@ -48,7 +52,7 @@ $(document).ready(function() {
 	    
 	});
 
-	$("#login_form").submit(function(e){
-		e.preventDefault(); 
-	});
+	//$("#login_form").submit(function(e){
+	//	e.preventDefault(); 
+	//});
 });

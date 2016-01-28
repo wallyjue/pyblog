@@ -44,11 +44,10 @@
                 <!-- Blog Entries Column -->
                 <div class="col-md-8">
                     {% if request.user.is_authenticated %}
-                        Your post is deleted.
-                        <a href="/blog/{{request.user}}">Back</a>
+                        Your post is {{action}}.
+                        <p><a class="btn btn-default" href="/blog/{{request.user}}">Back</a></p>
                     {% else %}
-                        <p>Login here: <a href="/blog/">Login</a></p>
-                        request.user
+                        <p>Login here: <a class="btn btn-default" href="/blog/">Login</a></p>
                     {% endif %}
                 </div>
             </div>

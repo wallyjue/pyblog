@@ -43,25 +43,25 @@
             <div class="row">
                 <!-- Blog Entries Column -->
                 <div class="col-md-8">
-                {% for post in post_list %}
+                
                 <h2>
                     <a href="/blog/{{request.user.username}}/{{ post.pk }}">{{ post.title }} </a>
                 </h2>
                 <p class="lead">
-                    Posted by <a href="">{{ post.author.owner.username }}</a> on {{ post.created_at }}
+                    Posted by <a href="/blog/{{ post.author.owner.username }}/">{{ post.author.owner.username }}</a>
+                     on {{ post.created_at }} | <a href="/blog/{{request.user.username}}?cat={{post.category.pk}}">{{post.category.name}}</a>
                 </p>
                 <hr>
                 
                 <hr>
                 <p>{{ post.content }}</p>
-                {% for tag in category %}
-                    {{tag.tag}}<br>
+                <hr>
+                
+                <div><ul class="list-group">
+                {% for file in attachs %}
+                    <li class = "list-group-item"><a href="/media/{{file}}">{{file}}</a></li>
                 {% endfor %}
-                    <div><ul class="list-group">
-                    {% for file in attachs %}
-                        <li class = "list-group-item"><a href="/media/{{file}}">{{file}}</a></li>
-                    {% endfor %}
-                    </ul></div>
+                </ul></div>
 
 
                 <a class="btn btn-primary" href="/blog/{{request.user.username}}/{{ post.pk }}">Read More</a>
@@ -71,7 +71,7 @@
                 {% endif %}
                 <hr>
                     
-                {% endfor %}
+                
                 </div>
                 <div class="col-md-4">
                     <div class="well">

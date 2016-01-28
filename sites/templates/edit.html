@@ -53,10 +53,10 @@
                     <input class="form-control" type="text" name="title" value="{{post.title}}" id="title"> <br />
 
                     <label for="content">content:</label>
-                    <textarea class="form-control" rows="5" name="content" value="{{post.content}}" id="content"></textarea> <br />
-
-                    <label for="docfile">attachment:</label>
-                    <input id="docfile" type="file" name="docfile" multiple="multiple">
+                    <textarea class="form-control" rows="5" name="content" value="{{post.content}}" id="content">{{post.content}}</textarea><br />
+                    <hr>
+                    <!--<label for="docfile">attachment:</label>
+                    <input id="docfile" type="file" name="docfile" multiple="multiple">-->
 
                     <label for="category">Select category:</label>
                     <select class="form-control" id="category" name="category">
@@ -64,10 +64,14 @@
                         <option>{{cat.name}}</option>
                         {% endfor %}
                     </select>
+                    <hr>
                     <label for="tag">tag:</label>
+                    {% for tag in post.tags %}
+                        <a class="btn btn-danger tag">{{tag.tag}}</a>
+                    {% endfor %}
                     <input class="form-control" type="text" name="tag" value="" id="tag"> <br />
                     </div>
-                    <input id="submit_create_post" type="submit" value="Submit" />
+                    <input class="btn btn-primary" id="submit_create_post" type="submit" value="Submit" />
                 </form>
                 {% else %}
                     <a href="/blog/">Login</a>
@@ -79,4 +83,17 @@
     <script type="text/javascript" src="{% static 'jquery-2.2.0.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'bootstrap.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'app.js' %}"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#category").children().each(function(){
+            if ($(this).text()=="{{post.category}}"){
+                $(this).attr("selected", "true");
+                this.selected = true; 
+            }
+        });
+        $(".tag").click(function(){
+            this.remove();
+        });
+    });
+    </script>
 </html>
