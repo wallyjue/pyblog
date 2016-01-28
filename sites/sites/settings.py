@@ -149,14 +149,9 @@ LOGGING = {
         }
     },
     'loggers': {
-        '': {
-            'handlers': ['console'],
-            'level': 'NOTSET',
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'propagate': False,
-            'level': 'ERROR'
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'NOTSET'
         }
     }
 }

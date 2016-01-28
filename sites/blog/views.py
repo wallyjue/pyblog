@@ -8,16 +8,14 @@ from .models import *
 import logging
 
 # Get an instance of a logger
-logger = logging.getLogger(__name__)
-
+logger = logging.getLogger('django')
 
 # Create your views here.
 def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
-    
     user = auth.authenticate(username=username, password=password)
-
+    logger.error('login page')
     if user is not None and user.is_active:
         auth.login(request, user)
         return blog_detail(request,username)
@@ -35,7 +33,6 @@ def blog_detail(request,username):
     category,blogtags,blog = get_tags_category(username)
     cat_pk = request.GET.get('cat', None)
     tag_name = request.GET.get('tag', None)
-
     post_list = []
     if cat_pk is not None:
         select_category = Category.objects.get(pk=cat_pk)
