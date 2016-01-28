@@ -31,6 +31,7 @@ class Post(models.Model):
 class Media(models.Model):
 	file = models.FileField(upload_to='%Y/%m/%d',null=True)
 	post = models.ForeignKey(Post)
+	content_type = models.CharField(max_length=20,null=True)
 	def __str__(self):
 		return u"%s" % (self.file)
 

@@ -138,7 +138,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'NOTSET',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },

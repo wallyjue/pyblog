@@ -6,6 +6,7 @@ from .models import *
 
 # import the logging library
 import logging
+import re
 
 # Get an instance of a logger
 logger = logging.getLogger('django')
@@ -46,6 +47,13 @@ def blog_detail(request,username):
         
     for post in post_list:
         post.media = Media.objects.filter(post = post)
+        for media in post.media:
+            if re.match('video', media.content_type):
+                media.content = 'video'
+            elif re.match('image', media.content_type):
+                media.content = 'image'
+            else:
+                pass
         post.tags = Tag.objects.filter(post = post)
 
     return render(request, 'index.html', {
@@ -118,7 +126,7 @@ def create_post(request):
             tags = request.POST.getlist('tag')
             newpost = Post.objects.create(author = blog,title=title, content=content,category=category)
             for eachfile in request.FILES.getlist('docfile'):
-                Media.objects.create(file = eachfile, post = newpost)
+                Media.objects.create(file = eachfile, post = newpost, content_type=eachfile.content_type)
 
             for key in tags:
                 Tag.objects.create(post=newpost,tag=key)

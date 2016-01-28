@@ -56,7 +56,14 @@
                     <hr>
                     {% if post.media.count > 0 %}
                         {% for media in post.media %}
-                            <img class="img-responsive" src="/media/{{media}}" alt=""></br>
+                            {% if media.content == 'image' %}
+                                <img class="img-responsive" src="/media/{{media}}" alt=""></br>
+                            {% elif media.content == 'video' %}
+                                <video class="img-responsive" controls>
+                                    <source src="/media/{{media}}" type="video/mp4">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         
