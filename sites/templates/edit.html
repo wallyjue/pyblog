@@ -44,7 +44,7 @@
         <div class="row">
             <!-- Blog Entries Column -->
             <div class="col-md-8">
-            
+            {% if blog.public %}
                 {% if request.user.is_authenticated %}
                 
                 <form role="form" id="create_post_form" action="/post/update/{{request.user.username}}/{{post.pk}}/" method="post">
@@ -65,7 +65,7 @@
                         {% endfor %}
                     </select>
                     <hr>
-                    <label for="tag">tag:</label>
+                    <label for="tag">tag:(You may have multiple tags with text separated by comma)</label>
                     {% for tag in post.tags %}
                         <a class="btn btn-danger tag">{{tag.tag}}</a>
                     {% endfor %}
@@ -76,6 +76,9 @@
                 {% else %}
                     <a href="/blog/">Login</a>
                 {% endif %}
+            {% else %}
+                <h1>This blog is a private blog. Go <a href="/blog/">back</a></h1>
+            {% endif %}
             </div>
         </div>
     </div>

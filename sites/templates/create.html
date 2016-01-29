@@ -44,34 +44,32 @@
         <div class="row">
             <!-- Blog Entries Column -->
             <div class="col-md-8">
-            
-                {% if request.user.is_authenticated %}
-                
-                <form role="form" id="create_post_form" action="/post/create/" method="post">
-                    <div class="form-group">
-                    <label for="title">title:</label>
-                    <input class="form-control" type="text" name="title" value="" id="title"> <br />
+            {% if request.user.is_authenticated %}
+            <form role="form" id="create_post_form" action="/post/create/" method="post">
+                <div class="form-group">
+                <label for="title">title:</label>
+                <input class="form-control" type="text" name="title" value="" id="title"> <br />
 
-                    <label for="content">content:</label>
-                    <textarea class="form-control" rows="5" name="content" value="" id="content"></textarea> <br />
-                    <hr>
-                    <label for="docfile">attachment:</label>
-                    <input id="docfile" type="file" name="docfile" multiple="multiple">
+                <label for="content">content:</label>
+                <textarea class="form-control" rows="5" name="content" value="" id="content"></textarea> <br />
+                <hr>
+                <label for="docfile">attachment:</label>
+                <input id="docfile" type="file" name="docfile" multiple="multiple">
 
-                    <label for="category">Select category:</label>
-                    <select class="form-control" id="category" name="category">
-                        {% for cat in category %}
-                        <option>{{cat.name}}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="tag">tag:</label>
-                    <input class="form-control" type="text" name="tag" value="" id="tag"> <br />
-                    </div>
-                    <input class="btn btn-primary" id="submit_create_post" type="submit" value="Submit" />
-                </form>
-                {% else %}
-                    <a href="/blog/">Login</a>
-                {% endif %}
+                <label for="category">Select category:</label>
+                <select class="form-control" id="category" name="category">
+                    {% for cat in category %}
+                    <option>{{cat.name}}</option>
+                    {% endfor %}
+                </select>
+                <label for="tag">tag:(You may have multiple tags with text separated by comma)</label>
+                <input class="form-control" type="text" name="tag" value="" id="tag"> <br />
+                </div>
+                <input class="btn btn-primary" id="submit_create_post" type="submit" value="Submit" />
+            </form>
+            {% else %}
+                <a href="/blog/">Login</a>
+            {% endif %}
             </div>
         </div>
     </div>

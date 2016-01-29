@@ -16,7 +16,7 @@ def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
     user = auth.authenticate(username=username, password=password)
-    logger.error('login page')
+    
     if user is not None and user.is_active:
         auth.login(request, user)
         return blog_detail(request,username)
@@ -32,6 +32,9 @@ def index(request):
 
 def blog_detail(request,username):
     category,blogtags,blog = get_tags_category(username)
+    if request.user.username == username:
+        blog.public = True
+
     cat_pk = request.GET.get('cat', None)
     tag_name = request.GET.get('tag', None)
     post_list = []
