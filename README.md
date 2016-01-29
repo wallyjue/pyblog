@@ -9,32 +9,32 @@ A simple blog written in django
     $cd sites
     $python runserver
 
-launch your browser and visit http://localhost:8000
+launch your browser and visit http://localhost:8000<br>
 admin page at http://localhost:8000/admin
 
 functions implemented:
 ----------------------
-0. view post/blog
-0a. private setting: if a blog is set to private, only author can visit that blog
-0b. filter post with category/tag
+1. view post/blog<br>
+1a. private setting: if a blog is set to private, only author can visit that blog<br>
+1b. filter post with category/tag
 
-1. create post
-1a. create post with attachment file (video and images)
-1b. create tags when creating a post
-1c. add category to post
+2. create post<br>
+2a. create post with attachment file (video and images)<br>
+2b. create tags when creating a post<br>
+2c. add category to post
 
-2. edit post
-2a. edit title,content,category,tags of a post
+3. edit post<br>
+3a. edit title,content,category,tags of a post
 
-3. delete post
+4. delete post<br>
 
 accounts created for demo:
 --------------------------
-username: public
-password: pythonjp
+username: public<br>
+password: pythonjp<br>
 
-username: private
-password: pythonjp
+username: private<br>
+password: pythonjp<br>
 
-admin page username: admin
-admin page password: password12345
+admin page username: admin<br>
+admin page password: password12345<br>
