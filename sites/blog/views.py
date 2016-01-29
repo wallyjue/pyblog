@@ -94,19 +94,17 @@ def edit_post(request,username,pk):
             post = Post.objects.get(pk=pk)
             title = request.POST.get('title', '')
             content = request.POST.get('content', '')
-            category = Category.objects.get(name=request.POST.get('category', 'None'))
+            post_category = Category.objects.get(name=request.POST.get('category', 'None'))
+            Tag.objects.filter(post = post).delete()
             tags = request.POST.getlist('tag')
-            attachs = Media.objects.filter(post=post)
-            post_list = Post.objects.filter(pk=pk)
-            post.tags = Tag.objects.filter(post = post)
-            return render(request, 'post.html', {
-                'post_list': post_list,
+            for key in tags:
+                Tag.objects.create(post=post,tag=key)
+
+            posts = Post.objects.filter(pk=pk)
+            posts.update(title=title,content=content,category=post_category)
+            return render(request, 'ok.html', {
                 'blog': blog,
-                'category':category,
-                'blogtags':blogtags,
-                'attachs':attachs,
-                'post':post,
-                'tags':tags
+                'action': 'edited',
                 })
         else:    
             post = Post.objects.get(pk=pk)

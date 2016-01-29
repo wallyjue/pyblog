@@ -47,7 +47,7 @@
             
                 {% if request.user.is_authenticated %}
                 
-                <form role="form" id="create_post_form" action="/post/create/" method="post">
+                <form role="form" id="create_post_form" action="/post/update/{{request.user.username}}/{{post.pk}}/" method="post">
                     <div class="form-group">
                     <label for="title">title:</label>
                     <input class="form-control" type="text" name="title" value="{{post.title}}" id="title"> <br />

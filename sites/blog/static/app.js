@@ -20,39 +20,31 @@ $(document).ready(function() {
 				for(var j =0; j < tags.length; j++){
 					if(tags[j].length > 0) postData.append(formData[i].name,tags[j]);
 				}
-				
+				var current_tags = $('.tag');
+				for(var j =0; j < current_tags.length; j++){
+					postData.append(formData[i].name,current_tags[j].innerHTML);
+				}
 			}else{
 				postData.append(formData[i].name,formData[i].value);	
 			}
 		}
-		for(var i = 0; i < $('#docfile')[0].files.length; i++){
-			postData.append('docfile',$('#docfile')[0].files[i]);
+		if($('#docfile')[0] != undefined){
+			for(var i = 0; i < $('#docfile')[0].files.length; i++){
+				postData.append('docfile',$('#docfile')[0].files[i]);
+			}	
 		}
-
-	    $.ajax(
-	    {
+	    $.ajax({
 	        url : formURL,
 	        type: "POST",
 	        data : postData,
 	        processData: false,
         	contentType: false,
-	        success:function(data, textStatus, jqXHR) 
-	        {
-	        	//console.log('success');
+	        success:function(data, textStatus, jqXHR){
 	        	$("body").html(data);
-	        	//window.location = '/blog/'+data;
 	        },
-	        error: function(jqXHR, textStatus, errorThrown) 
-	        {
+	        error: function(jqXHR, textStatus, errorThrown){
 	        	console.log('failure');
-	            //if fails      
 	        }
 	    });
-	    
-	    
 	});
-
-	//$("#login_form").submit(function(e){
-	//	e.preventDefault(); 
-	//});
 });
